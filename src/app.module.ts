@@ -10,6 +10,7 @@ import { MailerModule } from '@nestjs-modules/mailer';
 import { MailModule } from './mail/mail.module';
 
 import { LikedMovieModule } from './liked-movie/liked-movie.module';
+import { MovieListModule } from './movie-list/movie-list.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { LikedMovieModule } from './liked-movie/liked-movie.module';
     }),
     MailModule,
     LikedMovieModule,
+    MovieListModule,
   ],
   controllers: [AppController],
   providers: [AppService],
