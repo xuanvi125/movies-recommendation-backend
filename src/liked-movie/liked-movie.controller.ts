@@ -2,9 +2,11 @@ import {
   BadRequestException,
   Body,
   Controller,
+  Get,
   HttpCode,
   HttpStatus,
   Post,
+  Query,
   Req,
   UseGuards,
 } from '@nestjs/common';
@@ -18,6 +20,26 @@ import mongoose, { Types } from 'mongoose';
 export class LikedMovieController {
   constructor(private readonly likedMovieService: LikedMovieService) {}
 
+  @Get()
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(AuthGuard)
+  async getLikedMovies(@Req() request: Request, @Query('page') page: number) {
+    const user = request['user'];
+    const response = await this.likedMovieService.getLikedMovies(
+      user.sub,
+      page || 1,
+    );
+    return {
+      statusCode: 200,
+      message: 'Liked movies fetched successfully',
+      data: {
+        movies: response.movies,
+        page: page || 1,
+        totalPages: response.totalPages,
+      },
+    };
+  }
+
   @Post()
   @HttpCode(HttpStatus.OK)
   @UseGuards(AuthGuard)
@@ -29,6 +51,14 @@ export class LikedMovieController {
         user.sub,
         body.movieId,
       );
+
+      if (movie == null) {
+        return {
+          statusCode: 200,
+          message: 'Movie unliked successfully',
+          data: null,
+        };
+      }
       return {
         statusCode: 200,
         message: 'Movie liked successfully',

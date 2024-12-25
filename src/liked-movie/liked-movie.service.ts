@@ -28,9 +28,27 @@ export class LikedMovieService {
     });
 
     if (likedMovie) {
-      throw new LikedVideoException('Movie already liked');
+      await this.likedMovieModel.deleteOne({ _id: likedMovie._id });
+      return null;
     }
 
     return this.likedMovieModel.create({ userId: user._id, movieId });
+  }
+
+  async getLikedMovies(userId: string, page: number) {
+    const user = await this.userService.findByEmail(userId);
+
+    const totalMovies = await this.likedMovieModel.countDocuments({
+      userId: user._id,
+    });
+    const totalPages = Math.ceil(totalMovies / 10);
+
+    const movies = await this.likedMovieModel
+      .find({ userId: user._id })
+      .populate('movieId')
+      .skip((page - 1) * 10)
+      .limit(10);
+
+    return { movies, totalPages };
   }
 }
