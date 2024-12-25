@@ -12,7 +12,6 @@ import {
 import { UserService } from './user.service';
 import { SignUpDTO } from './dto/SignUpDTO';
 import { AuthGuard } from 'src/common/guards/auth.guard';
-import { User } from './schemas/user.schema';
 import { Request } from 'express';
 import EmailAlreadyExistsException from 'src/exceptions/EmailAlreadyExistsException';
 

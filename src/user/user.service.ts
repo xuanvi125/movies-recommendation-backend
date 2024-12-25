@@ -27,8 +27,8 @@ export class UserService {
     user.password = undefined;
     return user;
   }
-  async findByEmail(email: string): Promise<User> {
-    return await this.userModel.findOne({ email }).select('+password');
+  async findByEmail(email: string) {
+    return this.userModel.findOne({ email }).select('+password');
   }
   async getProfile(email: String) {
     return await this.userModel.findOne({ email });

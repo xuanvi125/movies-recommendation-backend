@@ -9,6 +9,8 @@ import { MovieModule } from './movie/movie.module';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { MailModule } from './mail/mail.module';
 
+import { LikedMovieModule } from './liked-movie/liked-movie.module';
+
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -29,6 +31,7 @@ import { MailModule } from './mail/mail.module';
       },
     }),
     MailModule,
+    LikedMovieModule,
   ],
   controllers: [AppController],
   providers: [AppService],
