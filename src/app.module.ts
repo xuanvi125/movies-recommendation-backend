@@ -11,6 +11,7 @@ import { MailModule } from './mail/mail.module';
 
 import { LikedMovieModule } from './liked-movie/liked-movie.module';
 import { MovieListModule } from './movie-list/movie-list.module';
+import { CastModule } from './cast/cast.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { MovieListModule } from './movie-list/movie-list.module';
     MailModule,
     LikedMovieModule,
     MovieListModule,
+    CastModule,
   ],
   controllers: [AppController],
   providers: [AppService],

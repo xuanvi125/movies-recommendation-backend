@@ -1,8 +1,15 @@
-import { Controller, Get, Param, Query, Type } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  NotFoundException,
+  Param,
+  Query,
+  Type,
+} from '@nestjs/common';
 import { MovieService } from './movie.service';
 import { Types } from 'mongoose';
 
-@Controller('/api/v1/movie')
+@Controller('movies')
 export class MovieController {
   constructor(private readonly movieService: MovieService) {}
 
@@ -18,8 +25,16 @@ export class MovieController {
   }
 
   @Get('/:id')
-  getMovieById(@Param('id') id: string) {
-    return this.movieService.getMovieById(id);
+  async getMovieById(@Param('id') id: string) {
+    const movie = await this.movieService.getMovieById(id);
+    if (!movie) {
+      throw new NotFoundException(`Movie with id ${id} not found`);
+    }
+    return {
+      statusCode: 200,
+      message: 'Movie fetched successfully',
+      data: movie,
+    };
   }
 
   @Get('/:id/credits')

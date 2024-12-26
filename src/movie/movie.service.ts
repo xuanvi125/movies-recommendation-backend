@@ -28,7 +28,6 @@ export class MovieService {
   }
   async getMovieById(id: string) {
     const movie = await this.movieModel.findById(id);
-
     return movie;
   }
 }
