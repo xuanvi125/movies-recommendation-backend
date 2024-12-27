@@ -8,6 +8,8 @@ import {
 } from '@nestjs/common';
 import { MovieService } from './movie.service';
 import { Types } from 'mongoose';
+import { Movie } from './schemas/movie.schema';
+import { MovieFilterRequestDTO } from './dto/MovieFilterRequestDTO';
 
 @Controller('movies')
 export class MovieController {
@@ -40,5 +42,14 @@ export class MovieController {
   @Get('/:id/credits')
   getMovieCredits(@Param('id') id: string) {
     return this.movieService.getMovieCredits(id);
+  }
+  @Get()
+  async getMovies(@Query() query: MovieFilterRequestDTO) {
+    const result = await this.movieService.getMovies(query);
+    return {
+      statusCode: 200,
+      message: 'Movies fetched successfully',
+      data: result,
+    };
   }
 }

@@ -4,8 +4,11 @@ import {
   HttpStatus,
   NotFoundException,
   Param,
+  Query,
 } from '@nestjs/common';
 import { CastService } from './cast.service';
+import { SearchCastRequestDTO } from './dto/SearchCastRequestDTO';
+import { ApiFeature } from 'src/utils/ApiFeature';
 
 @Controller('casts')
 export class CastController {
@@ -21,6 +24,15 @@ export class CastController {
       statusCode: HttpStatus.OK,
       message: 'Cast fetched successfully',
       data: cast,
+    };
+  }
+  @Get()
+  async search(@Query() query: SearchCastRequestDTO) {
+    const result = await this.castService.search(query);
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'Casts fetched successfully',
+      data: result,
     };
   }
 }

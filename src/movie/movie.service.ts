@@ -2,6 +2,8 @@ import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Movie } from './schemas/movie.schema';
 import { Model, Types } from 'mongoose';
+import { MovieFilterRequestDTO } from './dto/MovieFilterRequestDTO';
+import { ApiFeature } from 'src/utils/ApiFeature';
 
 const API_KEY = process.env.TMDB_API_KEY;
 const API_URL = 'https://api.themoviedb.org/3';
@@ -29,5 +31,23 @@ export class MovieService {
   async getMovieById(id: string) {
     const movie = await this.movieModel.findById(id);
     return movie;
+  }
+
+  async getMovies(query: MovieFilterRequestDTO) {
+    //TODO: implement filter by trending movies
+
+    const apiFeature = await new ApiFeature(this.movieModel.find(), query)
+      .search('title')
+      .filter()
+      .sort()
+      .paginate();
+
+    const movies = await apiFeature.query;
+
+    return {
+      page: apiFeature.page,
+      totalPages: apiFeature.totalPages,
+      data: movies,
+    };
   }
 }

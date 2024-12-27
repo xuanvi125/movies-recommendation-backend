@@ -7,11 +7,10 @@ export class Movie {
 
   description: string;
 
-  releaseDate: Date;
+  release_date: string;
 
-  genre: string;
+  genres: string[];
 
-  duration: number;
   rating: number;
 }
 export const MovieSchema = SchemaFactory.createForClass(Movie);
