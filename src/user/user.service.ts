@@ -53,6 +53,40 @@ export class UserService {
     return resetToken;
   }
 
+  async generateVerifyToken(email: string) {
+    const verifyToken = crypto.randomBytes(32).toString('hex');
+    const hashedToken = crypto
+      .createHash('sha256')
+      .update(verifyToken)
+      .digest('hex');
+
+    await this.userModel.findOneAndUpdate(
+      { email },
+      {
+        emailVerificationToken: hashedToken,
+        emailVerificationExpires: new Date(Date.now() + 10 * 60 * 1000),
+      },
+    );
+
+    return verifyToken;
+  }
+
+  async verifyEmailVerifyToken(token: string) {
+    const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
+    const user = await this.userModel.findOne({
+      emailVerificationToken: hashedToken,
+      emailVerificationExpires: { $gt: new Date() },
+    });
+    return user;
+  }
+
+  async verifyEmailAccount(user: any) {
+    user.isVerified = true;
+    user.emailVerificationToken = undefined;
+    user.emailVerificationExpires = undefined;
+    await user.save();
+  }
+
   async createGoogleUser(email: string, name: string, googleId: String) {
     const existingUser = await this.userModel.findOne({ email });
     if (existingUser) {

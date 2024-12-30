@@ -15,6 +15,15 @@ export class User {
   @Prop({ required: false })
   resetPasswordExpires: Date;
 
+  @Prop({ required: false, default: false })
+  isVerified: boolean;
+
+  @Prop({ required: false })
+  emailVerificationToken: string;
+
+  @Prop({ required: false })
+  emailVerificationExpires: Date;
+
   @Prop()
   googleId: string;
 

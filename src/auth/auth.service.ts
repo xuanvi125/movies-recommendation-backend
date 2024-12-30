@@ -72,4 +72,22 @@ export class AuthService {
     }
     await this.userService.updatePassword(user.email, password);
   }
+
+  async sendVerificationEmail(email: string) {
+    const user = await this.userService.findByEmail(email);
+    if (!user || user.isVerified) {
+      throw new UserNotFoundException(
+        'Invalid email address or email already verified!',
+      );
+    }
+    const token = await this.userService.generateVerifyToken(user.email);
+    this.mailService.sendVerificationEmail(user.email, token);
+  }
+  async verifyAccount(token: string) {
+    const user = await this.userService.verifyEmailVerifyToken(token);
+    if (!user) {
+      throw new TokenInvalidException('Invalid verification token or expired');
+    }
+    await this.userService.verifyEmailAccount(user);
+  }
 }

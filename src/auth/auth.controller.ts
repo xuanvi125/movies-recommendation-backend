@@ -68,6 +68,40 @@ export class AuthController {
         throw new BadRequestException('Invalid token or token expired');
     }
   }
+
+  @Get('verify-account')
+  @HttpCode(HttpStatus.OK)
+  async verifyAccount(@Query('token') token: string) {
+    try {
+      await this.authService.verifyAccount(token);
+      return {
+        statusCode: 200,
+        message: 'Account verified successfully',
+      };
+    } catch (error) {
+      if (error instanceof TokenInvalidException)
+        throw new BadRequestException('Invalid token or token expired');
+    }
+  }
+
+  @Post('verify-account')
+  @HttpCode(HttpStatus.OK)
+  async sendVerificationEmail(@Body() body: { email: string }) {
+    try {
+      await this.authService.sendVerificationEmail(body.email);
+      return {
+        statusCode: 200,
+        message: 'Verification email sent successfully',
+      };
+    } catch (error) {
+      if (error instanceof UserNotFoundException)
+        throw new BadRequestException(
+          'Invalid email or email already verified',
+        );
+    }
+  }
+
+  @HttpCode(HttpStatus.OK)
   @Get('google/login')
   @UseGuards(GoogleAuthGuard)
   async googleLogin() {}
