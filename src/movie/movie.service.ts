@@ -4,13 +4,18 @@ import { Movie } from './schemas/movie.schema';
 import { Model, Types } from 'mongoose';
 import { MovieFilterRequestDTO } from './dto/MovieFilterRequestDTO';
 import { ApiFeature } from 'src/utils/ApiFeature';
+import { VoteService } from 'src/vote/vote.service';
 
 const API_KEY = process.env.TMDB_API_KEY;
 const API_URL = 'https://api.themoviedb.org/3';
 
 @Injectable()
 export class MovieService {
-  constructor(@InjectModel(Movie.name) private movieModel: Model<Movie>) {}
+  constructor(
+    @InjectModel(Movie.name) 
+    private readonly movieModel: Model<Movie>,
+    private readonly voteService: VoteService,
+  ) {}
   async getTrendingMovies(day: string) {
     const url = `${API_URL}/trending/movie/${day}?api_key=${API_KEY}`;
     const response = await fetch(url);
@@ -29,8 +34,13 @@ export class MovieService {
     return await response.json();
   }
   async getMovieById(id: string) {
-    const movie = await this.movieModel.findById(id);
-    return movie;
+    const url = `${API_URL}/movie/${id}?api_key=${API_KEY}`;
+    const response = await fetch(url);
+    const result = await response.json();
+    const {vote_average, vote_count} = await this.voteService.getMovieVoteStatus(id);
+    result['vote_average'] = vote_average;
+    result['vote_count'] = vote_count;
+    return result;
   }
 
   async getMovies(query: MovieFilterRequestDTO) {
