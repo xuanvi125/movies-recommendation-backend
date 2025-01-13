@@ -16,7 +16,7 @@ export class CastController {
 
   @Get(':id')
   async findOne(@Param('id') id: string) {
-    const cast = await this.castService.findById(id);
+    const cast = await this.castService.findById(Number(id));
     if (!cast) {
       throw new NotFoundException(`Cast with id ${id} not found`);
     }
