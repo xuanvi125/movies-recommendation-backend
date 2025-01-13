@@ -15,6 +15,7 @@ import { MovieListModule } from './movie-list/movie-list.module';
 import { CastModule } from './cast/cast.module';
 import { GenreModule } from './genre/genre.module';
 import { FavoriteModule } from './fav/favorite.module';
+import { RecommendationModule } from './recommendation/recommendation.module';
 
 @Module({
   imports: [
@@ -41,7 +42,8 @@ import { FavoriteModule } from './fav/favorite.module';
     CastModule,
     GenreModule,
     VoteModule,
-    FavoriteModule
+    FavoriteModule,
+    RecommendationModule,
   ],
   controllers: [AppController],
   providers: [AppService],

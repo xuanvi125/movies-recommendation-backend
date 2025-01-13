@@ -8,8 +8,9 @@ import { ApiFeature } from 'src/utils/ApiFeature';
 @Injectable()
 export class CastService {
   constructor(@InjectModel(Cast.name) private castModel: Model<Cast>) {}
-  async findById(id: string) {
-    return await this.castModel.findById(id);
+  async findById(id: number) {
+    const data = await this.castModel.findOne({tmdb_id: id});
+    return data;
   }
 
   async search(query: SearchCastRequestDTO) {
