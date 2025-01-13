@@ -50,4 +50,14 @@ export class MovieService {
       data: movies,
     };
   }
+
+  async getListMovies(ids: string[]) {
+    if (!ids || ids.length === 0) {
+      return [];
+    }
+    const movies = await this.movieModel.find({
+      _id: { $in: ids.map((id) => new Types.ObjectId(id)) },
+    });
+    return movies;
+  }
 }

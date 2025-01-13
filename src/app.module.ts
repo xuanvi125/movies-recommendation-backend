@@ -13,6 +13,7 @@ import { LikedMovieModule } from './liked-movie/liked-movie.module';
 import { MovieListModule } from './movie-list/movie-list.module';
 import { CastModule } from './cast/cast.module';
 import { GenreModule } from './genre/genre.module';
+import { RecommendationModule } from './recommendation/recommendation.module';
 
 @Module({
   imports: [
@@ -38,6 +39,7 @@ import { GenreModule } from './genre/genre.module';
     MovieListModule,
     CastModule,
     GenreModule,
+    RecommendationModule,
   ],
   controllers: [AppController],
   providers: [AppService],
