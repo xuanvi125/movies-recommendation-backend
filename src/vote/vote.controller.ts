@@ -2,7 +2,6 @@ import { BadRequestException, Body, Catch, Controller, Delete, Get, HttpCode, Ht
 import { VoteService } from "./vote.service";
 import { AuthGuard } from "src/common/guards/auth.guard";
 import { VoteDTO } from "./dto/VoteDTO";
-import { VoteMovieException } from "src/exceptions/VoteMovieException";
 
 @Controller('vote')
 export class VoteController {
