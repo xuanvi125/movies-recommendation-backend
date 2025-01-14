@@ -33,10 +33,9 @@ export class MovieService {
     const response = await fetch(url);
     return await response.json();
   }
+
   async getMovieById(id: string) {
-    const url = `${API_URL}/movie/${id}?api_key=${API_KEY}`;
-    const response = await fetch(url);
-    const result = await response.json();
+    const result = await this.movieModel.findById(id);;
     const {vote_average, vote_count} = await this.voteService.getMovieVoteStatus(id);
     result['vote_average'] = vote_average;
     result['vote_count'] = vote_count;
@@ -69,5 +68,15 @@ export class MovieService {
       _id: { $in: ids.map((id) => new Types.ObjectId(id)) },
     });
     return movies;
+  }
+
+  async getCastFromListMovie(body: any) {
+    const { movieIds } = body;
+    const movies = await this.getListMovies(movieIds);
+
+    const casts = movies.map((movie) => movie.credits.cast).flat();;
+    const crew = movies.map((movie) => movie.credits.crew).flat();
+    
+    return {casts, crew};
   }
 }

@@ -12,5 +12,17 @@ export class Movie {
   genres: string[];
 
   rating: number;
+
+  @Prop({
+    type: {
+      cast: { type: [Object], default: [] },
+      crew: { type: [Object], default: [] },
+    },
+    default: { cast: [], crew: [] },
+  })
+  credits: {
+    cast: [];
+    crew: [];
+  };
 }
 export const MovieSchema = SchemaFactory.createForClass(Movie);

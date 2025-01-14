@@ -1,8 +1,10 @@
 import {
+  Body,
   Controller,
   Get,
   NotFoundException,
   Param,
+  Post,
   Query,
   Type,
 } from '@nestjs/common';
@@ -46,6 +48,16 @@ export class MovieController {
   @Get()
   async getMovies(@Query() query: MovieFilterRequestDTO) {
     const result = await this.movieService.getMovies(query);
+    return {
+      statusCode: 200,
+      message: 'Movies fetched successfully',
+      data: result,
+    };
+  }
+
+  @Post('/list-movies/cast')
+  async getCastFromListMovie(@Body() body: any) {
+    const result = await this.movieService.getCastFromListMovie(body);
     return {
       statusCode: 200,
       message: 'Movies fetched successfully',
