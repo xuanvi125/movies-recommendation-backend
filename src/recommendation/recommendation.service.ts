@@ -33,7 +33,6 @@ export class RecommendationService {
     }
     );
     const data = await response.json();
-    console.log(data);
     return data;
   }
 }

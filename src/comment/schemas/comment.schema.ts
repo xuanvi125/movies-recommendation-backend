@@ -10,6 +10,9 @@ export class Comment {
   userId: Types.ObjectId;
   @Prop({ required: true})
   content: string;
+
+  @Prop({ default: Date.now })
+  createdAt: Date;
 }
 
 export const CommentSchema = SchemaFactory.createForClass(Comment);

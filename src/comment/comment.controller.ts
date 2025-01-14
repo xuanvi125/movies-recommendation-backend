@@ -6,36 +6,32 @@ import { AuthGuard } from "src/common/guards/auth.guard";
 export class CommentController {
 	constructor(private readonly commentService: CommentService) {}
 	
-	@Post('add')
-  	@HttpCode(HttpStatus.OK)
+	@Post('')
+  @HttpCode(HttpStatus.OK)
 	@UseGuards(AuthGuard)
-	async addComment(@Req() request: Request, @Body() body: {movieId: string, comment: string}) {
+	async addComment(@Req() request: Request,
+                  @Body() body: {movieId: string, content: string}) {
 		const user = request['user'];
-		const comment = await this.commentService.addComment(user.sub, body.movieId, body.comment);
+    
+		const comment = await this.commentService.addComment
+      (user.sub, body.movieId, body.content);
 		return {
 			statusCode: 200,
-			message: 'Vote movie successfully',
+			message: 'Add comment to movie successfully',
 			data: comment,
 		};
 	} 
 	
 	@Get()
 	@HttpCode(HttpStatus.OK)
-	@UseGuards(AuthGuard)
-	async getComments(@Req() request: Request, @Query('movieId') movieId: string, @Query('page') page: number) {
-		const user = request['user'];
-		const response = await this.commentService.getComments(
-			user.sub,
-			movieId,
-			page || 1,
-		);
+	async getComments(@Req() request: Request, @Query('movieId') movieId: string) {
+		const response = await this.commentService.getComments(movieId);
+
 		return {
 			statusCode: 200,
-			message: 'Liked movies fetched successfully',
+			message: 'Get all comments successfully',
 			data: {
-				movies: response.comments,
-				page: page || 1,
-				totalPages: response.totalPages,
+				comments: response.comments,
 			},
 		};
 	}
