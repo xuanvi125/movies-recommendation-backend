@@ -5,11 +5,13 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { MovieSchema } from './schemas/movie.schema';
 import { VoteService } from 'src/vote/vote.service';
 import { VoteModule } from 'src/vote/vote.module';
+import { Rating } from 'src/rating/schema/rating.schema';
+import { RatingModule } from 'src/rating/rating.module';
 
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: 'Movie', schema: MovieSchema }]),
-    VoteModule
+    VoteModule,
   ],
   controllers: [MovieController],
   providers: [MovieService],

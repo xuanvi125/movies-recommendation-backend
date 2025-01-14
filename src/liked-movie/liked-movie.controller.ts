@@ -73,4 +73,17 @@ export class LikedMovieController {
       }
     }
   }
+
+  @Get('check')
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(AuthGuard)
+  async checkMovie(@Query('movieId') movieId: string, @Req() request: Request) {
+    const user = request['user'];
+    const response = await this.likedMovieService.checkMovie(movieId, user.sub);
+    return {
+      statusCode: 200,
+      message: 'Movie checked successfully',
+      data: response,
+    };
+  }
 }

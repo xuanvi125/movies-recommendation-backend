@@ -11,7 +11,11 @@ export class Movie {
 
   genres: string[];
 
+  @Prop({ default: 0 })
   rating: number;
+
+  @Prop({ default: 0 })
+  ratingQuantity: number;
 
   @Prop({
     type: {

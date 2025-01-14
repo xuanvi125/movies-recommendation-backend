@@ -17,6 +17,7 @@ import { GenreModule } from './genre/genre.module';
 import { FavoriteModule } from './fav/favorite.module';
 import { RecommendationModule } from './recommendation/recommendation.module';
 import { CommentModule } from './comment/comment.module';
+import { RatingModule } from './rating/rating.module';
 
 @Module({
   imports: [
@@ -46,6 +47,7 @@ import { CommentModule } from './comment/comment.module';
     FavoriteModule,
     CommentModule,
     RecommendationModule,
+    RatingModule,
   ],
   controllers: [AppController],
   providers: [AppService],

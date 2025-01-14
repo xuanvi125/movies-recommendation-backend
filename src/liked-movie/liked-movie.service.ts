@@ -51,4 +51,20 @@ export class LikedMovieService {
 
     return { movies, totalPages };
   }
+
+  async checkMovie(movieId: string, email: string) {
+    const user = await this.userService.findByEmail(email);
+    const movie = await this.movieService.getMovieById(movieId);
+
+    if (movie == null) {
+      throw new LikedVideoException('Movie not found');
+    }
+
+    const likedMovie = await this.likedMovieModel.findOne({
+      userId: user._id,
+      movieId,
+    });
+
+    return likedMovie != null;
+  }
 }

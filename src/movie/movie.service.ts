@@ -12,7 +12,7 @@ const API_URL = 'https://api.themoviedb.org/3';
 @Injectable()
 export class MovieService {
   constructor(
-    @InjectModel(Movie.name) 
+    @InjectModel(Movie.name)
     private readonly movieModel: Model<Movie>,
     private readonly voteService: VoteService,
   ) {}
@@ -35,10 +35,11 @@ export class MovieService {
   }
 
   async getMovieById(id: string) {
-    const result = await this.movieModel.findById(id);;
-    const {vote_average, vote_count} = await this.voteService.getMovieVoteStatus(id);
-    result['vote_average'] = vote_average;
-    result['vote_count'] = vote_count;
+    const result = await this.movieModel.findById(id);
+    // const { vote_average, vote_count } =
+    // //   await this.voteService.getMovieVoteStatus(id);
+    // // result['vote_average'] = vote_average;
+    // // result['vote_count'] = vote_count;
     return result;
   }
 
@@ -74,9 +75,20 @@ export class MovieService {
     const { movieIds } = body;
     const movies = await this.getListMovies(movieIds);
 
-    const casts = movies.map((movie) => movie.credits.cast).flat();;
+    const casts = movies.map((movie) => movie.credits.cast).flat();
     const crew = movies.map((movie) => movie.credits.crew).flat();
-    
-    return {casts, crew};
+
+    return { casts, crew };
+  }
+
+  async updateRating(movieId, ratings) {
+    const ratingQuantity = ratings.length;
+    const rating = ratings.reduce((acc, curr) => acc + curr.rating, 0);
+    const result = await this.movieModel.findByIdAndUpdate(
+      movieId,
+      { rating: rating / ratingQuantity, ratingQuantity },
+      { new: true },
+    );
+    return result;
   }
 }
