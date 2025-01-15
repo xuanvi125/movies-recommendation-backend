@@ -35,19 +35,19 @@ export class LikedMovieService {
     return this.likedMovieModel.create({ userId: user._id, movieId });
   }
 
-  async getLikedMovies(userId: string, page: number) {
+  async getLikedMovies(userId: string, page: number, limit: number) {
     const user = await this.userService.findByEmail(userId);
 
     const totalMovies = await this.likedMovieModel.countDocuments({
       userId: user._id,
     });
-    const totalPages = Math.ceil(totalMovies / 10);
+    const totalPages = Math.ceil(totalMovies / limit);
 
     const movies = await this.likedMovieModel
       .find({ userId: user._id })
       .populate('movieId')
-      .skip((page - 1) * 10)
-      .limit(10);
+      .skip((page - 1) * limit)
+      .limit(limit);
 
     return { movies, totalPages };
   }

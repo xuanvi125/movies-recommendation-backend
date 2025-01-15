@@ -23,11 +23,16 @@ export class LikedMovieController {
   @Get()
   @HttpCode(HttpStatus.OK)
   @UseGuards(AuthGuard)
-  async getLikedMovies(@Req() request: Request, @Query('page') page: number) {
+  async getLikedMovies(
+    @Req() request: Request,
+    @Query('page') page: number,
+    @Query('limit') limit: number,
+  ) {
     const user = request['user'];
     const response = await this.likedMovieService.getLikedMovies(
       user.sub,
       page || 1,
+      limit || 10,
     );
     return {
       statusCode: 200,

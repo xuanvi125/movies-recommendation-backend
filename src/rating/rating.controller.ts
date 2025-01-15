@@ -4,6 +4,7 @@ import {
   Controller,
   Get,
   Post,
+  Query,
   Req,
   UseGuards,
 } from '@nestjs/common';
