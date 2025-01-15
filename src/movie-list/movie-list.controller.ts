@@ -101,47 +101,4 @@ export class MovieListController {
       throw e;
     }
   }
-
-  @Post(':id/share')
-  @HttpCode(HttpStatus.OK)
-  @UseGuards(AuthGuard)
-  async shareMovieList(
-    @Req() request: Request,
-    @Param('id') movieListId: string,
-  ) {
-    try {
-      const payload = request['user'];
-      const shareUrl = await this.movieListService.shareMovieList(
-        payload.sub,
-        movieListId,
-      );
-      return {
-        statusCode: 200,
-        message: 'Movie list shared successfully',
-        data: { shareUrl },
-      };
-    } catch (e) {
-      if (e instanceof MovieListException) {
-        throw new BadRequestException(e.message);
-      }
-      throw e;
-    }
-  }
-
-  @Get('shared/:shareId')
-  async getSharedMovieList(@Param('shareId') shareId: string) {
-    try {
-      const movieList = await this.movieListService.getSharedMovieList(shareId);
-      return {
-        statusCode: 200,
-        message: 'Shared movie list retrieved successfully',
-        data: movieList,
-      };
-    } catch (e) {
-      if (e instanceof MovieListException) {
-        throw new BadRequestException(e.message);
-      }
-      throw e;
-    }
-  }
 }

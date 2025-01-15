@@ -79,39 +79,4 @@ export class MovieListService {
     }
     return movies;
   }
-
-  async shareMovieList(email: string, movieListId: string) {
-    const user = await this.userService.findByEmail(email);
-    const movieList = await this.movieListModel.findOne({
-      _id: movieListId,
-      userId: user._id,
-    });
-
-    if (!movieList) {
-      throw new MovieListException(
-        'Movie list not found or does not belong to user',
-      );
-    }
-
-    if (!movieList.isPublic) {
-      movieList.isPublic = true;
-      movieList.sharedUrl = nanoid(10);
-      await movieList.save();
-    }
-    return `${process.env.BASE_URL}/movie-list/shared/${movieList.sharedUrl}`;
-  }
-
-  async getSharedMovieList(sharedUrl: string) {
-    const moviesList = await this.movieListModel
-      .findOne({
-        sharedUrl,
-        isPublic: true,
-      })
-      .populate('movies');
-
-    if (!moviesList) {
-      throw new MovieListException('Shared movie list not found');
-    }
-    return moviesList;
-  }
 }

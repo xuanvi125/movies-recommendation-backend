@@ -96,6 +96,7 @@ export class UserService {
       email,
       name,
       googleId,
+      isVerified: true,
     };
 
     const user = new this.userModel(newUser);

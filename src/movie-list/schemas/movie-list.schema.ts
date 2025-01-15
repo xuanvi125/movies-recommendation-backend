@@ -20,9 +20,6 @@ export class MovieList {
   @Prop({ default: false })
   isPublic: boolean;
 
-  @Prop({ unique: true })
-  sharedUrl: string;
-
   @Prop({ default: Date.now })
   createdAt: Date;
 }
