@@ -35,4 +35,18 @@ export class CastController {
       data: result,
     };
   }
+
+  @Get(':id/movies')
+  async getMovies(
+    @Param('id') id: string,
+    @Query('page') page: number,
+    @Query('limit') limit: number,
+  ) {
+    const result = await this.castService.getMovies(id, page, limit);
+    return {
+      statusCode: HttpStatus.OK,
+      message: 'Movies fetched successfully',
+      data: result,
+    };
+  }
 }
