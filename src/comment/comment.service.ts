@@ -1,8 +1,8 @@
-import { Injectable } from "@nestjs/common";
-import { Comment } from "./schemas/comment.schema";
-import { UserService } from "src/user/user.service";
-import { InjectModel } from "@nestjs/mongoose";
-import { Model } from "mongoose";
+import { Injectable } from '@nestjs/common';
+import { Comment } from './schemas/comment.schema';
+import { UserService } from 'src/user/user.service';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
 
 @Injectable()
 export class CommentService {
@@ -13,24 +13,35 @@ export class CommentService {
   ) {}
   async addComment(email: string, movieId: string, comment: string) {
     const user = await this.userService.findByEmail(email);
-    return this.commentModel.create({ userId: user._id, movieId: movieId, content: comment});
+    return this.commentModel.create({
+      userId: user._id,
+      movieId: movieId,
+      content: comment,
+    });
   }
-  
-  async getComments(movieId: string) {
+
+  async getComments(movieId: string, page: number = 1, limit: number = 10) {
+    const totalComments = await this.commentModel.countDocuments({
+      movieId: movieId,
+    });
+
+    const totalPages = Math.ceil(totalComments / limit);
     const comments = await this.commentModel
-    .find({ movieId: movieId })
-    .select('-movieId') 
-    .populate({ path: 'userId', select: 'email' })
-    .sort({ createdAt: -1 }) 
-    .lean();
-  
+      .find({ movieId: movieId })
+      .select('-movieId')
+      .populate({ path: 'userId', select: 'email' })
+      .sort({ createdAt: -1 })
+      .lean()
+      .skip((page - 1) * limit)
+      .limit(limit);
+
     const now = new Date();
-  
-    const formattedComments = comments.map(comment => {
+
+    const formattedComments = comments.map((comment) => {
       const createdAt = new Date(comment.createdAt);
       const diffMs = now.getTime() - createdAt.getTime();
       const diffSeconds = Math.floor(diffMs / 1000);
-  
+
       let timeAgo = `${diffSeconds} seconds ago`;
       if (diffSeconds > 60) {
         const diffMinutes = Math.floor(diffSeconds / 60);
@@ -44,15 +55,13 @@ export class CommentService {
           }
         }
       }
-  
+
       return {
         ...comment,
-        timeAgo, 
+        timeAgo,
       };
     });
-  
-    return { comments: formattedComments };
-  }
 
-  
+    return { comments: formattedComments, totalPages: totalPages };
+  }
 }

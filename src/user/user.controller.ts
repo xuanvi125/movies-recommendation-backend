@@ -60,8 +60,8 @@ export class UserController {
   @UseGuards(AuthGuard)
   async getRatings(
     @Req() request: Request,
-    @Query('page') page: number,
-    @Query('limit') limit: number,
+    @Query('page') page: number = 1,
+    @Query('limit') limit: number = 10,
   ) {
     const payload = request['user'];
     const user = await this.userService.findByEmail(payload.sub);
